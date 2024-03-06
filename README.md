@@ -77,7 +77,9 @@ Improvement:
 Continuous improvement efforts are made to enhance the application based on user feedback and emerging requirements. New features are added, existing code is optimized, and bugs are addressed in each iteration.
 
 Results
+
 The culmination of our efforts is a robust and user-friendly application that streamlines the process of extracting and managing business card information. With BizCardX, users can easily upload images, extract data, view it in the application interface, and save it to a database with minimal hassle.
 
 Dataset
+
 BizCardX does not rely on a specific dataset, as it operates on user-uploaded images of business cards. This flexible approach allows users to extract information from a wide range of business card designs and formats, making the application highly versatile and adaptable.

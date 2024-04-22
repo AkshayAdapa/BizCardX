@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-from streamlit_option_menu import option_menu
 import easyocr
 import mysql.connector as sql
 from PIL import Image
@@ -25,6 +24,22 @@ st.markdown("""
 <h3 style='text-align: right;'>By Akshay Kumar</h3>
 """, unsafe_allow_html=True)
 
+import streamlit as st
+
+# Define the URLs and widths of the images
+image_url1 = "https://cdn.veryfi.com/wp-content/uploads/business-card-data-extraction.jpg"
+image_url2 = "https://miro.medium.com/v2/da:true/resize:fit:1200/0*STfB20RYe10Xwov7"
+image_width = 600
+
+# Display the images side by side
+col1, col2 = st.columns(2)
+
+with col1:
+    st.image(image_url1, caption='', width=image_width)
+
+with col2:
+    st.image(image_url2, caption='', width=image_width)
+
 # SETTING UP BACKGROUND IMAGE
 def setting_bg():
     st.markdown("""
@@ -35,18 +50,6 @@ def setting_bg():
     """, unsafe_allow_html=True)
 
 setting_bg()
-
-# CREATING OPTION MENU
-selected = option_menu(
-    None, ["Home", "Upload & Extract", "Modify"],
-    icons=["house", "cloud-upload", "pencil-square"],
-    default_index=0,
-    orientation="horizontal",
-    styles={"nav-link": {"font-size": "35px", "text-align": "center", "margin": "-2px", "--hover-color": "#6495ED"},
-            "icon": {"font-size": "35px"},
-            "container": {"max-width": "6000px"},
-            "nav-link-selected": {"background-color": "#6495ED"}}
-)
 
 # INITIALIZING THE EasyOCR READER
 reader = easyocr.Reader(['en'])
@@ -86,24 +89,39 @@ mycursor.execute(create_table_query)
 # Commit the changes
 mydb.commit()
 
+# MENU SELECTION
+menu_selection = st.selectbox("Main Menu", ["Home", "Upload & Extract Card Details", "Modify Data"])
+
 # HOME MENU
-if selected == "Home":
-    col1, col2 = st.columns(2)
-    with col1:
-        image_path = r"C:\Users\Akshay\OneDrive\Desktop\GUVI_Projects\BizCard\ocr.png"
-        image = Image.open(image_path)
-        resized_image = image.resize((500, 500))  # Adjust the size as needed
-        st.image(resized_image)
-        st.markdown("## :green[**Technologies Used :**] Python, easy OCR, Streamlit GUI, SQL, Pandas, Data Extraction")
-    with col2:
-        st.write("## :green[**About :**]")
-        st.write("### BizCardX automates the extraction of key details from business card images using OCR.")
-        st.write("### It extracts information like name, company, contact details, etc., and allows users to save it along with the card image.")
-        st.write("### Features:Upload business card images,Extract information using OCR,Save extracted data to a database,User-friendly interface")
-        st.write("### The main purpose of Bizcard is to automate the process of extracting key details from business card images, such as the name, designation, company, contact information, and other relevant data. By leveraging the power of OCR (Optical Character Recognition) provided by EasyOCR, Bizcard is able to extract text from the images.")
+if menu_selection == "Home":
+    st.markdown("# Welcome to BizCardX")
+    st.write("BizCardX is your solution for effortlessly extracting key details from business card images using OCR (Optical Character Recognition).")
+    
+    st.markdown("## How it Works")
+    st.write("Simply upload an image of a business card, and BizCardX will extract information such as the company name, card holder's name, designation, contact details, and more.")
+    st.write("You can then save the extracted data along with the card image for easy access.")
+    
+    st.markdown("## Features")
+    st.write("- Upload business card images")
+    st.write("- Extract information using OCR")
+    st.write("- Save extracted data to a database")
+    st.write("- User-friendly interface")
+    st.write("- View, update, and delete extracted data")
+    
+    st.markdown("# Project Details")
+    st.write("BizCardX aims to streamline the process of managing business card information.")
+    st.write("Using the power of OCR provided by EasyOCR, BizCardX automates the extraction of text from business card images.")
+    
+    st.markdown("### Technologies Used:")
+    st.write("- Python")
+    st.write("- EasyOCR")
+    st.write("- Streamlit GUI")
+    st.write("- SQL")
+    st.write("- Pandas")
+    st.write("- Data Extraction")
 
 # UPLOAD AND EXTRACT MENU
-if selected == "Upload & Extract":
+if menu_selection == "Upload & Extract Card Details":
     if st.button(":blue[Already stored data]"):
         mycursor.execute(
             "select company_name,card_holder,designation,mobile_number,email,website,area,city,state,pin_code from card_data")
@@ -236,17 +254,9 @@ if selected == "Upload & Extract":
             st.write(updated_df)
 
 # MODIFY MENU
-if selected == "Modify":
+if menu_selection == "Modify Data":
     st.subheader(':blue[You can view , alter or delete the extracted data in this app]')
-    select = option_menu(
-        None,
-        options=["ALTER", "DELETE"],
-        default_index=0,
-        orientation="horizontal",
-        styles={"container": {"width": "100%"},
-                "nav-link": {"font-size": "20px", "text-align": "center", "margin": "-2px"},
-                "nav-link-selected": {"background-color": "#6495ED"}}
-    )
+    select = st.selectbox("Modify Options", ["ALTER", "DELETE"])
 
     if select == "ALTER":
         st.markdown(":blue[Alter the data here]")
